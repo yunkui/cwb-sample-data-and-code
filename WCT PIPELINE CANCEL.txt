@@ -1,0 +1,19 @@
+
+declare @bd varchar(10), @ym varchar(7)
+--set @bd = '20180327'
+--set @ym = '2018-03'
+
+--truncate  table mis.rpt.wct_pipeline_cancel
+ --select * from mis.rpt.wct_pipeline_cancel
+insert  into mis.rpt.wct_pipeline_cancel 
+select a.*
+,case when a.area = 'Kal-Sul 1' then 'SME Region 4' 
+         when a.area = 'South JKT 2' then 'SME Region 2' 
+         when a.area = 'Sumatera' then 'SME Region 4' 
+ else b.region end as SME_REGION_NEW
+
+from FC.WCT_CUSTOMFIELD a
+left join (select DISTINCT AREA, REGION from [FC].[WCT_SME_ListRM] WHERE REGION IS NOT NULL and buss_date= @bd) b on a.area = b.area
+where buss_date = @bd and left(convert(varchar(10),Cancelled_Date,120),7) = @ym
+and ltrim(rtrim([application_type])) in ('New Application','Increase/Decrease Application') 
+ 

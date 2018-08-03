@@ -1,0 +1,107 @@
+DROP TABLE  MIS.RPT.WCT_PIPELINE
+select * into MIS.RPT.WCT_PIPELINE  from ( 		
+select  a.buss_date,		
+	    a.Application_Type,	
+		a.SME_REGION_NEW,
+        sum(Phase0_Apps) 'Phase_0_Apps',		
+		sum(Phase0_Amount)'Phase_0_Amount',
+		sum(Phase1_Apps) 'Phase_1_Apps',
+		sum(Phase1_Amount) 'Phase_1_Amount',
+		sum(Phase2_Apps)'Phase_2_Apps',
+		sum(Phase2_Amount)'Phase_2_Amount',
+		sum(Phase3_Apps)'Phase_3_Apps',
+		sum(Phase3_Amount)'Phase_3_Amount',
+		sum(Phase4_Apps)'Phase_4_Apps',
+		sum(Phase4_Amount)'Phase_4_Amount',
+        sum(B.Bal_Growth) 'Phase4_Bal Growth',		
+         sum(C.Formula) 'Phase4_Apps_2nd_Prev',		
+	     sum( C.Amount) 'Phase4_Amount_2nd_Prev',	
+         sum(D.Formula) 'Phase4_Apps_Prev_Month',		
+	     sum( D.Amount) 'Phase4_Amount_Prev_Month'	
+		
+from ( 		
+		
+	select buss_date,	
+	Application_Type,	
+		SME_REGION_NEW,
+		sum(case when phase = 'Phase 0' then formula else 0 end) 'Phase0_Apps',
+		sum(case when phase = 'Phase 0' then Amount else 0 end) 'Phase0_Amount',
+		sum(case when phase = 'Phase 1' then formula else 0 end) 'Phase1_Apps',
+		sum(case when phase = 'Phase 1' then Amount else 0 end) 'Phase1_Amount',
+		sum(case when phase = 'Phase 2' then formula else 0 end) 'Phase2_Apps',
+		sum(case when phase = 'Phase 2' then Amount else 0 end) 'Phase2_Amount',
+		sum(case when phase = 'Phase 3' then formula else 0 end) 'Phase3_Apps',
+		sum(case when phase = 'Phase 3' then Amount else 0 end) 'Phase3_Amount',
+		sum(case when phase = 'Phase 4' then formula else 0 end) 'Phase4_Apps',
+		sum(case when phase = 'Phase 4' then Amount else 0 end) 'Phase4_Amount' 
+		from  mis.fc.wct_sme_data 
+		where buss_date in ( select [buss_dt] from mis.fc.wct_sme_date )  and SME_REGION_NEW = 'SME Region 1' 
+		group by buss_date,Application_Type,SME_REGION_NEW
+		UNION 
+		select buss_date,
+		Application_Type,
+		SME_REGION_NEW,
+		sum(case when phase = 'Phase 0' then formula else 0 end) 'Phase 0 Apps',
+		sum(case when phase = 'Phase 0' then Amount else 0 end) 'Phase 0 Amount',
+		sum(case when phase = 'Phase 1' then formula else 0 end) 'Phase 1 Apps',
+		sum(case when phase = 'Phase 1' then Amount else 0 end) 'Phase 1 Amount',
+		sum(case when phase = 'Phase 2' then formula else 0 end) 'Phase 2 Apps',
+		sum(case when phase = 'Phase 2' then Amount else 0 end) 'Phase 2 Amount',
+		sum(case when phase = 'Phase 3' then formula else 0 end) 'Phase 3 Apps',
+		sum(case when phase = 'Phase 3' then Amount else 0 end) 'Phase 3 Amount',
+		sum(case when phase = 'Phase 4' then formula else 0 end) 'Phase 4 Apps',
+		sum(case when phase = 'Phase 4' then Amount else 0 end) 'Phase 4 Amount' 
+		from  mis.fc.wct_sme_data 
+		where buss_date in ( select [buss_dt] from mis.fc.wct_sme_date )   and SME_REGION_NEW = 'SME Region 2' 
+		group by buss_date,Application_Type,SME_REGION_NEW
+		UNION
+		select buss_date,
+		Application_Type,
+		SME_REGION_NEW,
+		sum(case when phase = 'Phase 0' then formula else 0 end) 'Phase 0 Apps',
+		sum(case when phase = 'Phase 0' then Amount else 0 end) 'Phase 0 Amount',
+		sum(case when phase = 'Phase 1' then formula else 0 end) 'Phase 1 Apps',
+		sum(case when phase = 'Phase 1' then Amount else 0 end) 'Phase 1 Amount',
+		sum(case when phase = 'Phase 2' then formula else 0 end) 'Phase 2 Apps',
+		sum(case when phase = 'Phase 2' then Amount else 0 end) 'Phase 2 Amount',
+		sum(case when phase = 'Phase 3' then formula else 0 end) 'Phase 3 Apps',
+		sum(case when phase = 'Phase 3' then Amount else 0 end) 'Phase 3 Amount',
+		sum(case when phase = 'Phase 4' then formula else 0 end) 'Phase 4 Apps',
+		sum(case when phase = 'Phase 4' then Amount else 0 end) 'Phase 4 Amount' 
+		from  mis.fc.wct_sme_data 
+		where buss_date in ( select [buss_dt] from mis.fc.wct_sme_date )   and SME_REGION_NEW = 'SME Region 3' 
+		group by buss_date,Application_Type,SME_REGION_NEW
+		UNION
+		select buss_date, 
+		Application_Type,
+		SME_REGION_NEW,
+		sum(case when phase = 'Phase 0' then formula else 0 end) 'Phase 0 Apps',
+		sum(case when phase = 'Phase 0' then Amount else 0 end) 'Phase 0 Amount',
+		sum(case when phase = 'Phase 1' then formula else 0 end) 'Phase 1 Apps',
+		sum(case when phase = 'Phase 1' then Amount else 0 end) 'Phase 1 Amount',
+		sum(case when phase = 'Phase 2' then formula else 0 end) 'Phase 2 Apps',
+		sum(case when phase = 'Phase 2' then Amount else 0 end) 'Phase 2 Amount',
+		sum(case when phase = 'Phase 3' then formula else 0 end) 'Phase 3 Apps',
+		sum(case when phase = 'Phase 3' then Amount else 0 end) 'Phase 3 Amount',
+		sum(case when phase = 'Phase 4' then formula else 0 end) 'Phase 4 Apps',
+		sum(case when phase = 'Phase 4' then Amount else 0 end) 'Phase 4 Amount' 
+		from  mis.fc.wct_sme_data 
+		where buss_date in( select [buss_dt] from mis.fc.wct_sme_date )   and SME_REGION_NEW = 'SME Region 4' 
+		group by buss_date,Application_Type,SME_REGION_NEW ) A 
+  LEft join ( select buss_date,Application_Type,SME_REGION_NEW,sum(Bal_Growth) Bal_Growth from  		
+               mis.fc.wct_sme_data  where buss_date = ( select [buss_dt] from mis.fc.wct_sme_date )  and phase = 'Phase 4' 		
+              group by buss_date,Application_Type,SME_REGION_NEW )  B 		
+  on  A.buss_date = b.buss_date and A.Application_Type = B.Application_Type and A.SME_region_New = B.SME_REGION_New  --and b.phase = 'Phase 4'       		
+   LEft join ( select buss_date,Application_Type,SME_REGION_NEW,sum(Formula) Formula,sum(Amount) Amount from  		
+               mis.fc.wct_sme_data  where buss_date in ( select eom_b4 from mis.fc.wct_sme_date )  and phase = 'Phase 4' 		
+              group by buss_date,Application_Type,SME_REGION_NEW )  C 		
+   on   A.Application_Type = C.Application_Type and A.SME_region_New = C.SME_REGION_New  --and b.phase = 'Phase 4'       		
+     LEft join ( select buss_date,Application_Type,SME_REGION_NEW,sum(Formula) Formula,sum(Amount) Amount from  		
+               mis.fc.wct_sme_data  where buss_date in ( select eom_dt from mis.fc.wct_sme_date )  and phase = 'Phase 4' 		
+              group by buss_date,Application_Type,SME_REGION_NEW )  D 		
+   on   A.Application_Type = D.Application_Type and A.SME_region_New = D.SME_REGION_New  --and b.phase = 'Phase 4'       		
+  		
+    Group by  a.buss_date,a.Application_Type,a.SME_REGION_NEW		
+  --     order by  a.buss_date,a.Application_Type,a.SME_REGION_NEW
+  		 ) A
+ 	
